@@ -1,0 +1,8 @@
+Flask
+playwright
+Pygments
+black
+pipreqs
+numpy
+tqdm
+python-decouple

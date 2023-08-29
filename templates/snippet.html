@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  {{ style_definitions }}
+
+  .code {
+    background-color: {{ style_bg_color }};
+  }
+</style>
+<form method="post">
+  <! -- Add a div called "code" so that we know where the code goes  -->
+  <div class="code">
+    <! -- Insert the highlighted code  -->
+    {{ highlighted_code | safe }}
+  </div>
+</form>
+{% endblock content %}
