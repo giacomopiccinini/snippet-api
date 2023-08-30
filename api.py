@@ -35,7 +35,7 @@ image = image.copy_local_dir(
 stub.image = image
 
 
-@stub.function(image=image)
+@stub.function(image=image, secret=modal.Secret.from_name("snippet-secret"))
 @wsgi_app()
 def snippet_app():
     from flask import Flask, render_template, request, url_for
