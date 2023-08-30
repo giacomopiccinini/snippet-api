@@ -1,2 +1,6 @@
 modal-client
 black
+python-decouple
+typer
+pillow
+requests
