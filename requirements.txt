@@ -1,8 +1,2 @@
-Flask
-playwright
-Pygments
+modal-client
 black
-pipreqs
-numpy
-tqdm
-python-decouple
