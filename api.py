@@ -38,7 +38,6 @@ stub.image = image
 @stub.function(image=image)
 @wsgi_app()
 def snippet_app():
-
     from flask import Flask, render_template, request, url_for
     from pygments import highlight
     from pygments.formatters import HtmlFormatter
@@ -80,7 +79,6 @@ def snippet_app():
 
     @app.route("/image", methods=["GET"])
     def screenshot():
-
         # Get the code from the request
         code = request.args.get("code")
         code = code or "print('Hello, World!')"
@@ -91,7 +89,6 @@ def snippet_app():
 
         # Set up context manager, which will automatically close the browser
         with sync_playwright() as playwright:
-
             # Create the url
             url = request.host_url + url_for("snippet", code=code, style=style)
 
