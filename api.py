@@ -8,11 +8,7 @@ stub = modal.Stub("snippet-api")
 image = modal.Image.debian_slim(python_version="3.10")
 
 # Pip install packages
-image = image.pip_install(
-    "Flask",
-    "playwright",
-    "Pygments",
-)
+image = image.pip_install("Flask", "playwright", "Pygments", "Flask-HTTPAuth")
 
 # Install playwright and its dependencies
 image = image.run_commands(
@@ -38,7 +34,10 @@ stub.image = image
 @stub.function(image=image, secret=modal.Secret.from_name("snippet-secret"))
 @wsgi_app()
 def snippet_app():
+    import os
+
     from flask import Flask, render_template, request, url_for
+    from flask_httpauth import HTTPTokenAuth
     from pygments import highlight
     from pygments.formatters import HtmlFormatter
     from pygments.lexers import Python3Lexer
@@ -46,6 +45,16 @@ def snippet_app():
 
     # Instantiate the Flask app
     app = Flask("website")
+
+    # Instatiate authentcator
+    auth = HTTPTokenAuth(scheme="Bearer")
+
+    @auth.verify_token
+    def verify_token(token):
+        """Verify if token provided is valid"""
+        if token == os.environ["AUTH_TOKEN"]:
+            print(os.environ["AUTH_TOKEN"])
+            return "user"
 
     @app.route("/snippet", methods=["GET"])
     def snippet():
@@ -78,6 +87,7 @@ def snippet_app():
         return render_template("snippet.html", **context)
 
     @app.route("/image", methods=["GET"])
+    @auth.login_required
     def screenshot():
         # Get the code from the request
         code = request.args.get("code")
